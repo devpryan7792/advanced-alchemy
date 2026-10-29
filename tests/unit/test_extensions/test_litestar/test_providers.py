@@ -1314,12 +1314,15 @@ def test_create_service_dependencies_scoped_filters() -> None:
             MockSyncService,
             key="user_service",
             scoped_filters=True,
-            filters={
-                "id_filter": True,
-                "search": "name",
-                "pagination_type": "limit_offset",
-                "in_fields": ["status"],
-            },
+            filters=cast(
+                FilterConfig,
+                {
+                    "id_filter": True,
+                    "search": "name",
+                    "pagination_type": "limit_offset",
+                    "in_fields": ["status"],
+                },
+            ),
         )
         assert "user_service" in deps
         assert "user_service_filters" in deps
@@ -1336,13 +1339,19 @@ def test_create_service_dependencies_merge_collision_prevented() -> None:
             MockSyncService,
             key="user_service",
             scoped_filters=True,
-            filters={"search": "name", "pagination_type": "limit_offset", "id_filter": True},
+            filters=cast(
+                FilterConfig,
+                {"search": "name", "pagination_type": "limit_offset", "id_filter": True},
+            ),
         )
         course_deps = create_service_dependencies(
             MockSyncService,
             key="course_service",
             scoped_filters=True,
-            filters={"search": "title", "pagination_type": "limit_offset", "id_filter": True},
+            filters=cast(
+                FilterConfig,
+                {"search": "title", "pagination_type": "limit_offset", "id_filter": True},
+            ),
         )
 
         merged_deps = {**user_deps, **course_deps}

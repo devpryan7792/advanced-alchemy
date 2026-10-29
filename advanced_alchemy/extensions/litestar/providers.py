@@ -135,15 +135,15 @@ class DependencyDefaults:
 
         if filters_key is not None or prefix:
             base = filters_key if filters_key is not None else cls.FILTERS_DEPENDENCY_KEY
-            self.FILTERS_DEPENDENCY_KEY = f"{prefix_clean}{base}" if prefix else base
+            object.__setattr__(self, "FILTERS_DEPENDENCY_KEY", f"{prefix_clean}{base}" if prefix else base)
 
         if created_filter_key is not None or prefix:
             base = created_filter_key if created_filter_key is not None else cls.CREATED_FILTER_DEPENDENCY_KEY
-            self.CREATED_FILTER_DEPENDENCY_KEY = f"{prefix_clean}{base}" if prefix else base
+            object.__setattr__(self, "CREATED_FILTER_DEPENDENCY_KEY", f"{prefix_clean}{base}" if prefix else base)
 
         if id_filter_key is not None or prefix:
             base = id_filter_key if id_filter_key is not None else cls.ID_FILTER_DEPENDENCY_KEY
-            self.ID_FILTER_DEPENDENCY_KEY = f"{prefix_clean}{base}" if prefix else base
+            object.__setattr__(self, "ID_FILTER_DEPENDENCY_KEY", f"{prefix_clean}{base}" if prefix else base)
 
         if limit_offset_filter_key is not None or prefix:
             base = (
@@ -151,22 +151,22 @@ class DependencyDefaults:
                 if limit_offset_filter_key is not None
                 else cls.LIMIT_OFFSET_FILTER_DEPENDENCY_KEY
             )
-            self.LIMIT_OFFSET_FILTER_DEPENDENCY_KEY = f"{prefix_clean}{base}" if prefix else base
+            object.__setattr__(self, "LIMIT_OFFSET_FILTER_DEPENDENCY_KEY", f"{prefix_clean}{base}" if prefix else base)
 
         if updated_filter_key is not None or prefix:
             base = updated_filter_key if updated_filter_key is not None else cls.UPDATED_FILTER_DEPENDENCY_KEY
-            self.UPDATED_FILTER_DEPENDENCY_KEY = f"{prefix_clean}{base}" if prefix else base
+            object.__setattr__(self, "UPDATED_FILTER_DEPENDENCY_KEY", f"{prefix_clean}{base}" if prefix else base)
 
         if order_by_filter_key is not None or prefix:
             base = order_by_filter_key if order_by_filter_key is not None else cls.ORDER_BY_FILTER_DEPENDENCY_KEY
-            self.ORDER_BY_FILTER_DEPENDENCY_KEY = f"{prefix_clean}{base}" if prefix else base
+            object.__setattr__(self, "ORDER_BY_FILTER_DEPENDENCY_KEY", f"{prefix_clean}{base}" if prefix else base)
 
         if search_filter_key is not None or prefix:
             base = search_filter_key if search_filter_key is not None else cls.SEARCH_FILTER_DEPENDENCY_KEY
-            self.SEARCH_FILTER_DEPENDENCY_KEY = f"{prefix_clean}{base}" if prefix else base
+            object.__setattr__(self, "SEARCH_FILTER_DEPENDENCY_KEY", f"{prefix_clean}{base}" if prefix else base)
 
         if default_pagination_size is not None:
-            self.DEFAULT_PAGINATION_SIZE = default_pagination_size
+            object.__setattr__(self, "DEFAULT_PAGINATION_SIZE", default_pagination_size)
 
 
 DEPENDENCY_DEFAULTS = DependencyDefaults()
@@ -453,7 +453,8 @@ def _create_statement_filters(  # noqa: C901, PLR0915
         dict[str, Provide]: Dictionary of filter provider functions
     """
     filters: dict[str, Provide] = {}
-    prefix_str = f"{dep_defaults.prefix.rstrip('_')}_" if getattr(dep_defaults, "prefix", None) else ""
+    prefix = getattr(dep_defaults, "prefix", None)
+    prefix_str = f"{prefix.rstrip('_')}_" if prefix else ""
     alias_for = (resolve_filter_aliases(config) if aliases is None else aliases).__getitem__
 
     if config.get("id_filter", False):
